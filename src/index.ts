@@ -19,6 +19,51 @@ interface CartQuantity{
     item: Item
 }
 
+class Shop {
+    private products: { [name: string]: CartQuantity  };
+
+    constructor(products:CartQuantity[] = []){
+        this.products = {};
+        products.forEach(product=> this.addProduct(product));
+    }
+
+    addProduct(shopItem:CartQuantity):void {
+        const {item, quantity} = shopItem;
+        if (!this.products[item.name]){
+            this.products[item.name] = shopItem
+        }
+        else {
+            console.log(`this item already exists inside the store`)
+        }
+    }
+
+    removeProduct(name:string):void {
+        if(!this.products[name]){
+            delete this.products[name]
+        }
+    }
+
+    removeProductQuantity(quantity:number, item:Item){
+        if (shop.products[item.name]){
+            const shopItem = shop.products[item.name];
+            if (shopItem?.quantity > quantity){
+                shopItem.quantity -= quantity
+            }
+            else {
+                console.log('Not enough items in store')
+            }
+        }
+    }
+
+    productList():void{
+        for (const name in this.products){
+            const {item, quantity} = this.products[name]
+            console.log(`${item.name} ${item.price} ${quantity}`)
+        }
+    }
+
+}
+
 function createUser(name:string, age: number){
     const id = uuidv4();
     const cart: any = []
@@ -36,13 +81,23 @@ function createItem(name: string, price: number, desc: string) {
 
 
 const item1: Item = createItem('eggs', 1.99, 'produced by a bird, considered as food');
+const storeItem1: CartQuantity = {item: item1, quantity:110};
+
 const item2: Item = createItem('bacon', 5.99, 'a type of salt-cured pork made from various cuts');
+const storeItem2: CartQuantity = {item: item2, quantity:110};
+
 const item3: Item = createItem('milk', 2.49, 'A whitish liquid containing proteins, fats, lactose.');
+const storeItem3: CartQuantity = {item: item3, quantity:110};
+
+const products = [storeItem1, storeItem2, storeItem3];
+
+const shop = new Shop(products);
 
 
 function addToCart(user:User, item:Item, quantity:number){
     const cartItem : CartQuantity = {item, quantity};
     user.cart.push(cartItem);
+    shop.removeProductQuantity(quantity, item)
 }
 
 
@@ -73,17 +128,6 @@ function cartTotal(user:User): number {
 }
 
 
-addToCart(user, item1, 10);
-addToCart(user, item2, 10);
-addToCart(user, item3, 10);
-
-console.log(user.cart)
-console.log(cartTotal(user));
-
-removeFromCart(item1, user);
-console.log(cartTotal(user));
-
-removeQuantityFromCart(item3, 2, user);
-
-console.log(user.cart)
-console.log(cartTotal(user));
+shop.productList();
+addToCart(user, item1, 109);
+shop.productList();
