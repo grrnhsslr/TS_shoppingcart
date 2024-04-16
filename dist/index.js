@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const uuid_1 = require("uuid");
+const Widget_1 = require("./Widget");
 class Shop {
     constructor(products = []) {
         this.products = {};
@@ -86,3 +87,10 @@ function cartTotal(user) {
 shop.productList();
 addToCart(user, item1, 109);
 shop.productList();
+const canvas = new Widget_1.Canvas(document.body);
+const firstElement = new Widget_1.Component();
+firstElement.shape = new Widget_1.RightLeaningContainer();
+firstElement.locationLeft = 1;
+firstElement.locationTop = 1;
+firstElement.content = '<h2>Shop</h2>';
+canvas;
